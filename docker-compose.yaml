@@ -38,7 +38,7 @@ services:
     image: airbyte/db:${VERSION}
     logging: *default-logging
     container_name: airbyte-db
-    restart: unless-stopped
+    restart: always
     environment:
       - CONFIG_DATABASE_PASSWORD=${CONFIG_DATABASE_PASSWORD:-}
       - CONFIG_DATABASE_URL=${CONFIG_DATABASE_URL:-}
@@ -56,7 +56,7 @@ services:
     image: airbyte/worker:${VERSION}
     logging: *default-logging
     container_name: airbyte-worker
-    restart: unless-stopped
+    restart: always
     environment:
       - AIRBYTE_VERSION=${VERSION}
       - AUTO_DISABLE_FAILING_CONNECTIONS=${AUTO_DISABLE_FAILING_CONNECTIONS}
@@ -119,7 +119,7 @@ services:
     image: airbyte/server:${VERSION}
     logging: *default-logging
     container_name: airbyte-server
-    restart: unless-stopped
+    restart: always
     environment:
       - AIRBYTE_ROLE=${AIRBYTE_ROLE:-}
       - AIRBYTE_VERSION=${VERSION}
@@ -159,7 +159,7 @@ services:
     image: airbyte/webapp:${VERSION}
     logging: *default-logging
     container_name: airbyte-webapp
-    restart: unless-stopped
+    restart: always
     ports:
       - 80
     environment:
@@ -177,7 +177,7 @@ services:
     image: airbyte/temporal:${VERSION}
     logging: *default-logging
     container_name: airbyte-temporal
-    restart: unless-stopped
+    restart: always
     environment:
       - DB=postgresql
       - DB_PORT=${DATABASE_PORT}
@@ -194,7 +194,7 @@ services:
     image: airbyte/cron:${VERSION}
     logging: *default-logging
     container_name: airbyte-cron
-    restart: unless-stopped
+    restart: always
     environment:
       - AIRBYTE_VERSION=${VERSION}
       - CONFIGS_DATABASE_MINIMUM_FLYWAY_MIGRATION_VERSION=${CONFIGS_DATABASE_MINIMUM_FLYWAY_MIGRATION_VERSION}
@@ -216,7 +216,7 @@ services:
     image: airbyte/connector-builder-server:${VERSION}
     logging: *default-logging
     container_name: airbyte-connector-builder-server
-    restart: unless-stopped
+    restart: always
     ports:
       - 8003:80
     environment:
