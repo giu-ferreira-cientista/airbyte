@@ -33,7 +33,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL}
       - RUN_DATABASE_MIGRATION_ON_STARTUP=${RUN_DATABASE_MIGRATION_ON_STARTUP}
     networks:
-      - modern-data-stack
+      - airbyte_internal
   db:
     image: airbyte/db:${VERSION}
     logging: *default-logging
@@ -51,7 +51,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     networks:
-      - modern-data-stack
+      - airbyte_internal
   worker:
     image: airbyte/worker:${VERSION}
     logging: *default-logging
@@ -114,7 +114,7 @@ services:
     ports:
       - 9000
     networks:
-      - modern-data-stack
+      - airbyte_internal
   server:
     image: airbyte/server:${VERSION}
     logging: *default-logging
@@ -154,7 +154,7 @@ services:
       - data:${CONFIG_ROOT}
       - ${LOCAL_ROOT}:${LOCAL_ROOT}
     networks:
-      - modern-data-stack
+      - airbyte_internal
   webapp:
     image: airbyte/webapp:${VERSION}
     logging: *default-logging
@@ -172,7 +172,7 @@ services:
       - PAPERCUPS_STORYTIME=${PAPERCUPS_STORYTIME:-}
       - TRACKING_STRATEGY=${TRACKING_STRATEGY}
     networks:
-      - modern-data-stack
+      - airbyte_internal
   airbyte-temporal:
     image: airbyte/temporal:${VERSION}
     logging: *default-logging
@@ -189,7 +189,7 @@ services:
     volumes:
       - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
     networks:
-      - modern-data-stack
+      - airbyte_internal
   airbyte-cron:
     image: airbyte/cron:${VERSION}
     logging: *default-logging
@@ -211,7 +211,7 @@ services:
     volumes:
       - workspace:${WORKSPACE_ROOT}
     networks:
-      - modern-data-stack
+      - airbyte_internal
   airbyte-connector-builder-server:
     image: airbyte/connector-builder-server:${VERSION}
     logging: *default-logging
@@ -222,7 +222,7 @@ services:
     environment:
       - AIRBYTE_VERSION=${VERSION}
     networks:
-      - modern-data-stack
+      - airbyte_internal
   airbyte-proxy:
     image: airbyte/proxy:${VERSION}
     container_name: airbyte-proxy
@@ -233,7 +233,8 @@ services:
       - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME}
       - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
     networks:
-      - modern-data-stack
+      - airbyte_internal
+      - airbyte_public
     depends_on:
       - webapp
       - server
@@ -248,5 +249,5 @@ volumes:
   db:
     name: ${DB_DOCKER_MOUNT}
 networks:
-  modern-data-stack:
-      name: modern-data-stack
+  airbyte_public:
+  airbyte_internal:
